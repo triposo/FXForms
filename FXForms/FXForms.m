@@ -1969,6 +1969,7 @@ static void FXFormPreprocessFieldDictionary(NSMutableDictionary *dictionary)
 {
     _form = form;
     self.sections = [FXFormSection sectionsWithForm:form controller:self];
+    [self.tableView reloadData];
 }
 
 - (NSUInteger)numberOfSections
