@@ -1837,6 +1837,10 @@ static void FXFormPreprocessFieldDictionary(NSMutableDictionary *dictionary)
 
 - (Class)cellClassForField:(FXFormField *)field
 {
+    if (field.cellClass)
+    {
+        return field.cellClass;
+    }
     if (field.type != FXFormFieldTypeDefault)
     {
         return self.cellClassesForFieldTypes[field.type] ?:
@@ -2082,7 +2086,7 @@ static void FXFormPreprocessFieldDictionary(NSMutableDictionary *dictionary)
 - (UITableViewCell *)cellForField:(FXFormField *)field
 {
     //don't recycle cells - it would make things complicated
-    Class cellClass = field.cellClass ?: [self cellClassForField:field];
+    Class cellClass = [self cellClassForField:field];
     NSString *nibName = NSStringFromClass(cellClass);
     if ([[NSBundle mainBundle] pathForResource:nibName ofType:@"nib"])
     {
@@ -2110,7 +2114,7 @@ static void FXFormPreprocessFieldDictionary(NSMutableDictionary *dictionary)
 - (CGFloat)tableView:(__unused UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     FXFormField *field = [self fieldForIndexPath:indexPath];
-    Class cellClass = field.cellClass ?: [self cellClassForField:field];
+    Class cellClass = [self cellClassForField:field];
     if ([cellClass respondsToSelector:@selector(heightForField:width:)])
     {
         return [cellClass heightForField:field width:self.tableView.frame.size.width];
